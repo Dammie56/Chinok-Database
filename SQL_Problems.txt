@@ -64,58 +64,6 @@ select * from Track; -- 3503
 19) Are there invalid tracks in the playlist?
 
 
-1) Find the artist who has contributed with the maximum no of albums. Display the artist name and the no of albums.
-with cte_rnk as
-    (select count(albumid) as no_of_albums,
-    al.artistid,
-    ar.name as artist_name,
-    rank() over(order by count(albumid)desc) rnk
-    from artist ar
-    join album al on ar.artistid = al.artistid
-    group by al.artistid,ar.name)
-select 
-artist_name,
-no_of_albums
-from cte_rnk
-where rnk = 1;
-
-2) Display the name, email id, country of all listeners who love Jazz, Rock and Pop music.
-select concat(cu.firstname,' ',cu.lastname) as name, cu.email,cu.country,ge.name as genre_name
-from customer cu
-join invoice inv on cu.customerid = inv.customerid
-join invoiceline inl on inl.invoiceid = inv.invoiceid
-join track tr on inl.trackid = tr.trackid
-join genre ge on tr.trackid = ge.genreid
-where ge.name in ('Jazz','Rock','Pop')
-
-
-3) Find the employee who has supported the most no of customers. Display the employee name and designation
-with cte_rnk as
-    (select concat(em.firstname,' ',em.lastname) as employee_name,
-    em.title as designation,
-    rank() over(order by count(cu.supportrepid)desc)rnk
-    from customer cu
-    join employee em on em.employeeid = cu.supportrepid
-    group by concat(em.firstname,' ',em.lastname),em.title)
-select employee_name,
-designation
-from cte_rnk
-where rnk = 1;
-
-select * from Album; -- 347
-select * from Artist; -- 275
-select * from Customer; -- 59
-select * from Employee; -- 8
-select * from Genre; -- 25
-select * from Invoice; -- 412
-select * from InvoiceLine; -- 2240
-select * from MediaType; -- 5
-select * from Playlist; -- 18
-select * from PlaylistTrack; -- 8715
-select * from Track; -- 3503
---4) Which city corresponds to the best customers?
-
-
 
 
 
